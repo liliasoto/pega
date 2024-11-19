@@ -46,7 +46,7 @@ export default function ProductList() {
   const [newProduct, setNewProduct] = useState<Omit<Product, 'id'>>({ name: '', price: 0, description: '' });
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-  const API_URL = 'https://mi-backend-productos.onrender.com'; // Cambia esto a tu URL de producción cuando despliegues
+  const API_URL = 'https://mi-backend-productos.onrender.com/api/products'; // Cambia esto a tu URL de producción cuando despliegues
 
   useEffect(() => {
     fetchProducts();
