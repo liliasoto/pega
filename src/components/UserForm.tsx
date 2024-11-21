@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 
 interface User {
-  id: string;
+  _id: string;  // Cambiado de 'id' a '_id' para coincidir con MongoDB
   name: string;
   phoneNumber: string;
 }
@@ -42,7 +42,7 @@ const userCardStyle: React.CSSProperties = {
 
 export default function UserForm() {
   const [users, setUsers] = useState<User[]>([]);
-  const [newUser, setNewUser] = useState<Omit<User, 'id'>>({ name: '', phoneNumber: '' });
+  const [newUser, setNewUser] = useState<Omit<User, '_id'>>({ name: '', phoneNumber: '' });
   const [editingUser, setEditingUser] = useState<User | null>(null);
 
   const API_URL = 'https://mi-backend-productos.onrender.com/api/users';
@@ -68,7 +68,7 @@ export default function UserForm() {
     e.preventDefault();
     try {
       const method = editingUser ? 'PUT' : 'POST';
-      const url = editingUser ? `${API_URL}/${editingUser.id}` : API_URL;
+      const url = editingUser ? `${API_URL}/${editingUser._id}` : API_URL;
       const response = await fetch(url, {
         method: method,
         headers: { 'Content-Type': 'application/json' },
@@ -128,13 +128,13 @@ export default function UserForm() {
       </form>
       <div>
         {users.map((user) => (
-          <div key={user.id} style={userCardStyle}>
+          <div key={user._id} style={userCardStyle}>
             <h3 style={{ fontSize: '18px', fontWeight: 'bold' }}>{user.name}</h3>
             <p>Teléfono: {user.phoneNumber}</p>
             <button onClick={() => handleEdit(user)} style={buttonStyle}>
               Editar
             </button>
-            <button onClick={() => handleDelete(user.id)} style={{...buttonStyle, backgroundColor: '#ff4040'}}>
+            <button onClick={() => handleDelete(user._id)} style={{...buttonStyle, backgroundColor: '#ff4040'}}>
               Eliminar
             </button>
           </div>

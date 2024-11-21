@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 
 interface Product {
-  id: string;
+  _id: string;  // Cambiado de 'id' a '_id' para coincidir con MongoDB
   name: string;
   price: number;
   description: string;
@@ -43,10 +43,10 @@ const productCardStyle: React.CSSProperties = {
 
 export default function ProductList() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [newProduct, setNewProduct] = useState<Omit<Product, 'id'>>({ name: '', price: 0, description: '' });
+  const [newProduct, setNewProduct] = useState<Omit<Product, '_id'>>({ name: '', price: 0, description: '' });
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-  const API_URL = 'https://mi-backend-productos.onrender.com/api/products'; // Cambia esto a tu URL de producción cuando despliegues
+  const API_URL = 'https://mi-backend-productos.onrender.com/api/products';
 
   useEffect(() => {
     fetchProducts();
@@ -56,7 +56,7 @@ export default function ProductList() {
     try {
       const response = await fetch(API_URL);
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       setProducts(data);
@@ -69,14 +69,14 @@ export default function ProductList() {
     e.preventDefault();
     try {
       const method = editingProduct ? 'PUT' : 'POST';
-      const url = editingProduct ? `${API_URL}/${editingProduct.id}` : API_URL;
+      const url = editingProduct ? `${API_URL}/${editingProduct._id}` : API_URL;
       const response = await fetch(url, {
         method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newProduct)
       });
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       setNewProduct({ name: '', price: 0, description: '' });
       setEditingProduct(null);
@@ -90,7 +90,7 @@ export default function ProductList() {
     try {
       const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       fetchProducts();
     } catch (error) {
@@ -136,14 +136,14 @@ export default function ProductList() {
       </form>
       <div>
         {products.map((product) => (
-          <div key={product.id} style={productCardStyle}>
+          <div key={product._id} style={productCardStyle}>
             <h3 style={{ fontSize: '18px', fontWeight: 'bold' }}>{product.name}</h3>
             <p>Precio: ${product.price}</p>
             <p>{product.description}</p>
             <button onClick={() => handleEdit(product)} style={buttonStyle}>
               Editar
             </button>
-            <button onClick={() => handleDelete(product.id)} style={{...buttonStyle, backgroundColor: '#ff4040'}}>
+            <button onClick={() => handleDelete(product._id)} style={{...buttonStyle, backgroundColor: '#ff4040'}}>
               Eliminar
             </button>
           </div>
