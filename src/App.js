@@ -1,9 +1,13 @@
 import './App.css';
 import ProductList from './components/ProductList.tsx';
+import UserForm from './components/UserForm.tsx';
 
 function App() {
   return (
-    <ProductList></ProductList>
+    <div>
+      <ProductList></ProductList>
+      <UserForm></UserForm>
+    </div>
   );
 }
 
